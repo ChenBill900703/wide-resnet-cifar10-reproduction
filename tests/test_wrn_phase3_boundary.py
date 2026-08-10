@@ -87,13 +87,7 @@ def test_optimizer_steps_and_backward_are_confined_to_training_engine() -> None:
     assert calls == [("training.py", "backward"), ("training.py", "step")]
 
 
-def test_repository_has_no_phase3_training_artifacts_or_formal_launcher() -> None:
-    prohibited_names = {"formal_train.py", "run_5seeds.py", "launch_training.py"}
-    assert not any(
-        path.name in prohibited_names
-        for path in ROOT.rglob("*.py")
-        if not _is_under_excluded_directory(ROOT, path)
-    )
+def test_repository_has_no_training_artifacts() -> None:
     assert not (ROOT / "runs").exists()
     assert not (ROOT / "checkpoints").exists()
     assert find_phase3_training_artifacts(ROOT) == ()

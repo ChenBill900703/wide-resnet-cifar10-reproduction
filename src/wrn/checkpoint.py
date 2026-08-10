@@ -18,8 +18,8 @@ from .schedule import lr_for_epoch
 from .state import TrainingCursor
 
 
-CHECKPOINT_FORMAT_VERSION = 1
-ENGINE_VERSION = "phase3-v1"
+CHECKPOINT_FORMAT_VERSION = 2
+ENGINE_VERSION = "phase5-v1"
 FORMAL_TARGET_NAME = "WRN16-8-CIFAR10-ARXIV-V4-MEANSTD-NODROPOUT-V1"
 FROZEN_CONFIG_SHA256 = (
     "18EF6815727ADF6816132954721194626950F4B40BD2606A5B7E2297EAB959B3"
@@ -100,12 +100,25 @@ def build_checkpoint(
     cursor: TrainingCursor,
     *,
     run_seed: int,
+    code_commit_sha: str | None = None,
+    formal_run_id: str | None = None,
 ) -> dict[str, Any]:
     """Capture all formal state without selecting or recording test metrics."""
 
     cursor.validate()
     if run_seed not in (1, 2, 3, 4, 5):
         raise ValueError("run_seed must be one of the frozen seeds 1..5")
+    if (code_commit_sha is None) != (formal_run_id is None):
+        raise ValueError(
+            "formal checkpoint code_commit_sha and formal_run_id must be set together"
+        )
+    if code_commit_sha is not None and (
+        len(code_commit_sha) != 40
+        or any(character not in "0123456789abcdef" for character in code_commit_sha)
+    ):
+        raise ValueError("code_commit_sha must be a lowercase full Git SHA")
+    if formal_run_id is not None and not formal_run_id.strip():
+        raise ValueError("formal_run_id must be non-empty")
     assert_formal_parameter_group(model, optimizer, expected_lr=None)
     current_lrs = {float(group["lr"]) for group in optimizer.param_groups}
     if len(current_lrs) != 1:
@@ -119,6 +132,8 @@ def build_checkpoint(
         "engine_version": ENGINE_VERSION,
         "formal_target_name": FORMAL_TARGET_NAME,
         "frozen_config_sha256": FROZEN_CONFIG_SHA256,
+        "code_commit_sha": code_commit_sha,
+        "formal_run_id": formal_run_id,
         "model_signature": _model_signature(model),
         "model_state_dict": model.state_dict(),
         "optimizer_state_dict": optimizer.state_dict(),
@@ -139,13 +154,20 @@ def save_checkpoint_atomic(
     cursor: TrainingCursor,
     *,
     run_seed: int,
+    code_commit_sha: str | None = None,
+    formal_run_id: str | None = None,
 ) -> None:
     """Write in the destination directory and atomically replace on success."""
 
     destination = Path(path)
     destination.parent.mkdir(parents=True, exist_ok=True)
     payload = build_checkpoint(
-        model, optimizer, cursor, run_seed=run_seed
+        model,
+        optimizer,
+        cursor,
+        run_seed=run_seed,
+        code_commit_sha=code_commit_sha,
+        formal_run_id=formal_run_id,
     )
     temporary_name: str | None = None
     try:
@@ -175,18 +197,33 @@ def load_checkpoint(
     path: str | Path,
     model: nn.Module,
     optimizer: torch.optim.Optimizer,
+    *,
+    expected_run_seed: int | None = None,
+    expected_code_commit_sha: str | None = None,
+    expected_formal_run_id: str | None = None,
 ) -> tuple[TrainingCursor, int]:
     """Validate compatibility, restore objects, then restore RNG last."""
 
     payload = _read_checkpoint(path)
     required_matches = {
         "format_version": CHECKPOINT_FORMAT_VERSION,
+        "engine_version": ENGINE_VERSION,
         "formal_target_name": FORMAL_TARGET_NAME,
         "frozen_config_sha256": FROZEN_CONFIG_SHA256,
         "epoch_data_policy_identifier": EPOCH_DATA_POLICY,
     }
     for name, expected in required_matches.items():
         if payload.get(name) != expected:
+            raise CheckpointCompatibilityError(
+                f"checkpoint {name} mismatch: {payload.get(name)!r} != {expected!r}"
+            )
+    optional_matches = {
+        "run_seed": expected_run_seed,
+        "code_commit_sha": expected_code_commit_sha,
+        "formal_run_id": expected_formal_run_id,
+    }
+    for name, expected in optional_matches.items():
+        if expected is not None and payload.get(name) != expected:
             raise CheckpointCompatibilityError(
                 f"checkpoint {name} mismatch: {payload.get(name)!r} != {expected!r}"
             )

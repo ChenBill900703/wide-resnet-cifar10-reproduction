@@ -109,6 +109,7 @@ def test_checkpoint_schema_model_optimizer_cursor_and_rng_restore(
         ("formal_target_name", "WRONG", "formal_target_name mismatch"),
         ("frozen_config_sha256", "0" * 64, "frozen_config_sha256 mismatch"),
         ("format_version", 999, "format_version mismatch"),
+        ("engine_version", "wrong", "engine_version mismatch"),
     ],
 )
 def test_checkpoint_identity_tamper_fails_closed(
