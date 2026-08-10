@@ -1,0 +1,142 @@
+project:
+  name: wide-resnet-cifar10-reproduction
+  formal_target: WRN16-8-CIFAR10-ARXIV-V4-MEANSTD-NODROPOUT-V1
+  freeze_version: 1
+  approval_date: '2026-08-10'
+  scope: CIFAR-10 only
+
+paper: Wide Residual Networks
+paper_version: arXiv:1605.07146v4
+paper_result_locator: page 8, Table 5
+dataset: CIFAR-10
+model: WRN-16-8 B(3,3)
+depth: 16
+widen_factor: 8
+blocks_per_group: 2
+stage_channels:
+  stem: 16
+  group1: 128
+  group2: 256
+  group3: 512
+stage_spatial_sizes: [32, 32, 16, 8]
+dropout: 0.0
+num_classes: 10
+
+shortcut:
+  dimension_preserving_input: raw_x
+  dimension_changing_input: first_bn_relu_output
+  projection: conv1x1_with_stage_stride
+  residual_branch_input: first_bn_relu_output
+  post_add_relu: false
+
+input_scale: [0, 255]
+mean: [125.3, 123.0, 113.9]
+std: [63.0, 62.1, 66.7]
+augmentation:
+  order: [horizontal_flip, reflection_pad, random_crop]
+  horizontal_flip_probability: 0.5
+  historical_flip_branch: draw_0_flips_draw_1_unchanged
+  padding: 4
+  reflection: edge_excluding
+  crop_size: 32
+  crop_offset_domain_zero_based: [0, 8]
+
+initialization:
+  convolution_weight:
+    distribution: normal
+    mean: 0.0
+    std_formula: sqrt(2/(kernel_width*kernel_height*input_channels))
+  convolution_bias: absent
+  fully_connected_weight:
+    distribution: uniform
+    lower_formula: -1/sqrt(input_features)
+    upper_formula: 1/sqrt(input_features)
+  fully_connected_bias: 0.0
+  batch_norm:
+    affine: true
+    gamma_distribution: uniform_[0,1)
+    beta: 0.0
+    running_mean: 0.0
+    running_variance: 1.0
+    epsilon: 0.00001
+    momentum_new_batch_weight: 0.1
+
+batch_size: 128
+optimizer: SGD
+momentum: 0.9
+nesterov: true
+dampening: 0.0
+weight_decay: 0.0005
+weight_decay_scope:
+  semantics: coupled_decay_over_all_learnable_parameters
+  included: [convolution_weights, batch_norm_gamma, batch_norm_beta, fully_connected_weight, fully_connected_bias]
+  excluded: [convolution_bias_absent, batch_norm_running_statistics_buffers]
+initial_lr: 0.1
+lr_schedule:
+  boundary: start_of_one_based_epoch
+  segments:
+    - {start_epoch: 1, end_epoch: 59, lr: 0.1}
+    - {start_epoch: 60, end_epoch: 119, lr: 0.02}
+    - {start_epoch: 120, end_epoch: 159, lr: 0.004}
+    - {start_epoch: 160, end_epoch: 200, lr: 0.0008}
+epochs: 200
+drop_last: true
+test_include_all: true
+derived_iterator_cross_check:
+  train_size: 50000
+  test_size: 10000
+  train_batches_per_epoch: 390
+  train_samples_consumed_per_epoch: 49920
+  total_optimizer_updates: 78000
+  classification: DERIVED FROM OFFICIAL-CODE-SPECIFIED
+
+run_seeds: [1, 2, 3, 4, 5]
+epoch_data_seed_policy:
+  independent_of_run_seed: true
+  zero_based_epoch_index: e0 in [0,199]
+  formula: epoch_data_seed=e0+1
+  resulting_seeds: 1 through 200
+checkpoint_policy:
+  official_checkpoint_epoch: 200
+  required_save_epochs: [60, 120, 160, 200]
+  diagnostic_evaluation_may_run_each_epoch: true
+  diagnostic_results_must_not_select_checkpoint: true
+aggregation:
+  run_count: 5
+  statistic: median
+  input_value: epoch_200_cifar10_test_error
+  report_individual_runs: true
+  post_hoc_seed_or_aggregation_change: prohibited
+
+determinism:
+  precision: FP32
+  cudnn_benchmark: false
+  deterministic_algorithms: true_where_supported
+  unsupported_operation_policy: report_do_not_silently_fallback
+amp: false
+tf32: false
+compile: false
+
+reference_error:
+  value_percent: 4.27
+  metric: CIFAR-10 test error
+  aggregation: median_over_5_runs
+  classification: PAPER-SPECIFIED
+paper_parameter_count:
+  value_millions: 11.0
+  precision: rounded_to_one_decimal_million
+  classification: PAPER-SPECIFIED
+
+classification:
+  paper_fields: retain PAPER-SPECIFIED only where directly stated
+  official_code_fields: retain OFFICIAL-CODE-SPECIFIED and exact pinned locators
+  approved_project_choices: retain IMPLEMENTATION-ASSUMPTION where applicable
+  derived_values: never relabel as paper iteration counts
+provenance:
+  local_paper: references/wide_residual_networks.pdf
+  local_paper_sha256: AF606AEB02AE3D713A3BA7AD34A5A583D911A5FD33E52B76507DC37A8ED021E9
+  official_repository: https://github.com/szagoruyko/wide-residual-networks
+  official_commit: ae6d0d0561484172790c7a63c8ce6ade5a5a2914
+  primary_official_lineage: paper-era Torch7
+  auxiliary_official_lineage: later official PyTorch, architecture cross-check only
+  source_details: docs/evidence_table.md
