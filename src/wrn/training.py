@@ -41,8 +41,14 @@ def configure_reproducibility(run_seed: int) -> None:
         torch.cuda.manual_seed_all(run_seed)
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
-    torch.backends.cuda.matmul.allow_tf32 = False
-    torch.backends.cudnn.allow_tf32 = False
+    if hasattr(torch.backends.cuda.matmul, "fp32_precision") and hasattr(
+        torch.backends.cudnn, "fp32_precision"
+    ):
+        torch.backends.cuda.matmul.fp32_precision = "ieee"
+        torch.backends.cudnn.fp32_precision = "ieee"
+    else:
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
     torch.use_deterministic_algorithms(True)
 
 

@@ -78,6 +78,22 @@ def _model_signature(model: nn.Module) -> dict[str, tuple[tuple[int, ...], str]]
     }
 
 
+def _environment_metadata(model: nn.Module) -> dict[str, Any]:
+    parameters = list(model.parameters())
+    device = parameters[0].device if parameters else torch.device("cpu")
+    metadata: dict[str, Any] = {
+        "python": platform.python_version(),
+        "torch": torch.__version__,
+        "device_type": device.type,
+        "device_index": device.index,
+        "torch_cuda": torch.version.cuda,
+        "cudnn": torch.backends.cudnn.version(),
+    }
+    if device.type == "cuda":
+        metadata["gpu_name"] = torch.cuda.get_device_name(device)
+    return metadata
+
+
 def build_checkpoint(
     model: nn.Module,
     optimizer: torch.optim.Optimizer,
@@ -112,10 +128,7 @@ def build_checkpoint(
         "epoch_data_policy_identifier": EPOCH_DATA_POLICY,
         "current_lr": current_lr,
         "rng_state": capture_rng_state(),
-        "environment": {
-            "python": platform.python_version(),
-            "torch": torch.__version__,
-        },
+        "environment": _environment_metadata(model),
     }
 
 

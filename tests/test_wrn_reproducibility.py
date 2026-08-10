@@ -19,5 +19,11 @@ def test_engine_reproducibility_settings_and_seed_replay() -> None:
     assert torch.are_deterministic_algorithms_enabled()
     assert torch.backends.cudnn.benchmark is False
     assert torch.backends.cudnn.deterministic is True
-    assert torch.backends.cuda.matmul.allow_tf32 is False
-    assert torch.backends.cudnn.allow_tf32 is False
+    if hasattr(torch.backends.cuda.matmul, "fp32_precision") and hasattr(
+        torch.backends.cudnn, "fp32_precision"
+    ):
+        assert torch.backends.cuda.matmul.fp32_precision == "ieee"
+        assert torch.backends.cudnn.fp32_precision == "ieee"
+    else:
+        assert torch.backends.cuda.matmul.allow_tf32 is False
+        assert torch.backends.cudnn.allow_tf32 is False
