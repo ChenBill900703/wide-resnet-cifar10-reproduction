@@ -1,0 +1,76 @@
+{
+  "aggregation_rule": {
+    "input_value": "epoch_200_cifar10_test_error",
+    "post_hoc_seed_or_aggregation_change": "prohibited",
+    "report_individual_runs": true,
+    "run_count": 5,
+    "statistic": "median"
+  },
+  "calculation_status": "PASS",
+  "canonical_payload_sha256": "993C9057DFF5B265DCE0E6087AB63628CC1DE2E272D0D2DC7D263D0DCD28C49D",
+  "code_commit_sha": "225cf8d44c36a8a210f6989bf76b9ebfe460adbd",
+  "difference_from_reference_percentage_points": "+0.13",
+  "frozen_config_sha256": "18EF6815727ADF6816132954721194626950F4B40BD2606A5B7E2297EAB959B3",
+  "frozen_median": {
+    "accuracy_percent": "95.60",
+    "correct": 9560,
+    "incorrect": 440,
+    "seed": 2,
+    "test_error_percent": "4.40"
+  },
+  "inputs_seed_order": [
+    {
+      "accuracy_percent": "95.59",
+      "correct": 9559,
+      "final_checkpoint_sha256": "4AB151DEBC161CD719F0E33B7B3676246B52CC1F8BAE68DA01E62DC030601F47",
+      "final_result_sha256": "9CDABE01319CBC615992B3746ECB654C3813548DDA872FA32E599473BF92EE2C",
+      "incorrect": 441,
+      "seed": 1,
+      "test_error_percent": "4.41"
+    },
+    {
+      "accuracy_percent": "95.60",
+      "correct": 9560,
+      "final_checkpoint_sha256": "B26BB0E52E2B10D808BE7B8BE724624D1DA0338A84BC9DD181FF8559FC2217FD",
+      "final_result_sha256": "810E4DCFB1AF58B191DDF5CAF667C1EF8ADEAFC0097DEABA0790768BFBAFC4C1",
+      "incorrect": 440,
+      "seed": 2,
+      "test_error_percent": "4.40"
+    },
+    {
+      "accuracy_percent": "95.68",
+      "correct": 9568,
+      "final_checkpoint_sha256": "7D60439E946680B8EE794157817581BFB560E98075FC754BF6EACAA173984DEA",
+      "final_result_sha256": "E7E904661844596903680C7D4344C8D1326AF505F3E54297BF3D6B8D8E4E47B5",
+      "incorrect": 432,
+      "seed": 3,
+      "test_error_percent": "4.32"
+    },
+    {
+      "accuracy_percent": "95.72",
+      "correct": 9572,
+      "final_checkpoint_sha256": "6BB022C606978E106337AF217B8EE7E512E62F5FD0578A52F9A40716A1D464F2",
+      "final_result_sha256": "29855DD16B5DCDACF5F405484283B8CEA6488E9F09499A3CDB9AED55EA20BED2",
+      "incorrect": 428,
+      "seed": 4,
+      "test_error_percent": "4.28"
+    },
+    {
+      "accuracy_percent": "95.57",
+      "correct": 9557,
+      "final_checkpoint_sha256": "D0144AF2F2119DA2E2D8B4118A91AD1E9C6E47948CD5AA213B98BF5C67506FF1",
+      "final_result_sha256": "8F7CE2FCF1425EA54E220BFACB42F6287A5EBCBB1E65E68C171B3EB010C2C3A1",
+      "incorrect": 443,
+      "seed": 5,
+      "test_error_percent": "4.43"
+    }
+  ],
+  "inputs_sorted_by_test_error": [
+    { "seed": 4, "test_error_percent": "4.28" },
+    { "seed": 3, "test_error_percent": "4.32" },
+    { "seed": 2, "test_error_percent": "4.40" },
+    { "seed": 1, "test_error_percent": "4.41" },
+    { "seed": 5, "test_error_percent": "4.43" }
+  ],
+  "paper_reference_test_error_percent": "4.27"
+}

@@ -1,0 +1,14 @@
+Paper:
+Wide Residual Networks
+
+Authors:
+Sergey Zagoruyko, Nikos Komodakis
+
+Venue:
+BMVC 2016
+
+arXiv:
+1605.07146
+
+Official code:
+szagoruyko/wide-residual-networks
