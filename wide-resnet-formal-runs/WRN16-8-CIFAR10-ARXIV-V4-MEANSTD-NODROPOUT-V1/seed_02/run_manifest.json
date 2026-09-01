@@ -1,0 +1,188 @@
+{
+  "checkpoint_format_version": 2,
+  "code_baseline_status": "FROZEN_COMMIT",
+  "code_commit_sha": "225cf8d44c36a8a210f6989bf76b9ebfe460adbd",
+  "dataset": {
+    "archive_actual_sha256": "6D958BE074577803D12ECDEFD02955F39262C83C16FE9348329D7FE0B5C001CE",
+    "archive_name": "cifar-10-python.tar.gz",
+    "archive_present": true,
+    "archive_sha256": "6D958BE074577803D12ECDEFD02955F39262C83C16FE9348329D7FE0B5C001CE",
+    "download_performed": false,
+    "name": "CIFAR-10",
+    "official_split_integrity": true,
+    "test_samples": 10000,
+    "train_samples": 50000
+  },
+  "environment": {
+    "compute_capability": [
+      8,
+      6
+    ],
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "cudnn": 91002,
+    "current_device_index": 0,
+    "default_dtype": "torch.float32",
+    "gpu_name": "NVIDIA GeForce RTX 3070 Ti",
+    "gpu_total_vram_bytes": 8589410304,
+    "numpy": "2.4.4",
+    "nvidia_driver": "591.86",
+    "os": "Windows-10-10.0.26100-SP0",
+    "pip": "26.2.1",
+    "pytest": "9.1.1",
+    "python": "3.11.9",
+    "python_executable_identity": ".venv/Scripts/python.exe",
+    "pyyaml": "6.0.3",
+    "selected_device_index": 0,
+    "torch": "2.13.0+cu126",
+    "torch_cuda_build": "12.6",
+    "torchvision": "0.28.0+cu126"
+  },
+  "formal_run_id": "WRN16-8-CIFAR10-ARXIV-V4-MEANSTD-NODROPOUT-V1/seed_02",
+  "formal_seed_set": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "formal_target_name": "WRN16-8-CIFAR10-ARXIV-V4-MEANSTD-NODROPOUT-V1",
+  "frozen_artifact_sha256": {
+    "AGENTS.md": "2E169C8EA5B65685B5A8254AF6F9DF0C4F407062ECE47893C0BA240BF7D7471F",
+    "configs/wrn16_8_arxiv_v4_frozen.yaml": "18EF6815727ADF6816132954721194626950F4B40BD2606A5B7E2297EAB959B3",
+    "docs/assumptions.md": "A09A2D497FD0D72A1B14751124D2E9BD00C1F84A617E0CF38F0B56D7213F9794",
+    "docs/evidence_table.md": "99E2B7D82BCA17CCDACC8E1E0D03FE90AB5EB160B80CFCA4A4F4E51C05780FA2",
+    "docs/open_questions.md": "541C07906823843868E76E9458E53DAA89EC5F1AF048BE04D4D31B05E74CD987",
+    "docs/reproduction_spec.md": "7D471C9F90B6A172D25ABF83E8FBADD7CEC83656EA88EA4058DC3C0A22DC965F",
+    "references/wide_residual_networks.pdf": "AF606AEB02AE3D713A3BA7AD34A5A583D911A5FD33E52B76507DC37A8ED021E9"
+  },
+  "frozen_config_path": "configs/wrn16_8_arxiv_v4_frozen.yaml",
+  "frozen_config_sha256": "18EF6815727ADF6816132954721194626950F4B40BD2606A5B7E2297EAB959B3",
+  "human_authorized_seed": 2,
+  "initial_training_fingerprint": "8737789f0d217822f7e5f87ce784817b5ea4dc436c7381f9d989d0b95cff6e0a",
+  "installed_package_inventory": [
+    "colorama==0.4.6",
+    "filelock==3.29.0",
+    "fsspec==2026.4.0",
+    "iniconfig==2.3.0",
+    "Jinja2==3.1.6",
+    "MarkupSafe==3.0.3",
+    "mpmath==1.3.0",
+    "networkx==3.6.1",
+    "numpy==2.4.4",
+    "packaging==26.3",
+    "pillow==12.2.0",
+    "pip==26.2.1",
+    "pluggy==1.6.0",
+    "Pygments==2.20.0",
+    "pytest==9.1.1",
+    "PyYAML==6.0.3",
+    "setuptools==78.1.0",
+    "sympy==1.14.0",
+    "torch==2.13.0+cu126",
+    "torchvision==0.28.0+cu126",
+    "typing_extensions==4.15.0"
+  ],
+  "no_post_seed1_tuning_rule": "After seed 1 first CIFAR optimizer step, any protocol/source change invalidates seed 1 and requires a new freeze and restart of all seeds.",
+  "numerical_policy": {
+    "amp": false,
+    "autocast_cuda_enabled": false,
+    "compile": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "default_dtype": "torch.float32",
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "eager_execution": true,
+    "fp32": true,
+    "tf32_enabled": false,
+    "tf32_evidence": {
+      "api": "fp32_precision",
+      "cudnn": "ieee",
+      "matmul": "ieee"
+    }
+  },
+  "output_directory": "D:\\wide-resnet-formal-runs\\WRN16-8-CIFAR10-ARXIV-V4-MEANSTD-NODROPOUT-V1\\seed_02",
+  "recipe": {
+    "batch_size": 128,
+    "best_checkpoint_selection": false,
+    "checkpoint_epochs": [
+      60,
+      120,
+      160,
+      200
+    ],
+    "checkpoint_updates": {
+      "120": 46800,
+      "160": 62400,
+      "200": 78000,
+      "60": 23400
+    },
+    "data_loader_workers": 2,
+    "diagnostic_evaluation_cadence": "none_before_epoch_200",
+    "epoch_data_seed_policy": "zero_based_e0_to_seed_e0_plus_1_v1",
+    "epochs": 200,
+    "loss": {
+      "label_smoothing": 0.0,
+      "reduction": "mean",
+      "type": "torch.nn.CrossEntropyLoss"
+    },
+    "lr_schedule": [
+      {
+        "end_epoch": 59,
+        "lr": 0.1,
+        "start_epoch": 1
+      },
+      {
+        "end_epoch": 119,
+        "lr": 0.02,
+        "start_epoch": 60
+      },
+      {
+        "end_epoch": 159,
+        "lr": 0.004,
+        "start_epoch": 120
+      },
+      {
+        "end_epoch": 200,
+        "lr": 0.0008,
+        "start_epoch": 160
+      }
+    ],
+    "model": {
+      "blocks_per_group": 2,
+      "depth": 16,
+      "dropout": 0.0,
+      "identity": "WRN-16-8 B(3,3)",
+      "stage_channels": [
+        16,
+        128,
+        256,
+        512
+      ],
+      "trainable_parameters": 10961370,
+      "widen_factor": 8
+    },
+    "optimizer": {
+      "dampening": 0.0,
+      "foreach": false,
+      "fused": false,
+      "lr": 0.1,
+      "momentum": 0.9,
+      "nesterov": true,
+      "parameter_groups": 1,
+      "scope": "all_trainable_parameters",
+      "type": "torch.optim.SGD",
+      "weight_decay": 0.0005,
+      "weight_decay_semantics": "coupled"
+    },
+    "result_selection": "epoch_200_final_checkpoint_only",
+    "test_drop_last": false,
+    "total_planned_updates": 78000,
+    "train_drop_last": true,
+    "updates_per_epoch": 390
+  },
+  "schema_version": 1,
+  "seed": 2,
+  "start_timestamp_utc": "2026-08-10T15:51:54.082724+00:00"
+}

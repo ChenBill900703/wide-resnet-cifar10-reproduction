@@ -1,0 +1,12 @@
+{
+  "cursor": {
+    "current_epoch_1": 201,
+    "global_update": 78000,
+    "next_batch_index_0": 0
+  },
+  "resume_count": 0,
+  "schema_version": 1,
+  "seed": 5,
+  "status": "COMPLETED",
+  "updated_at_utc": "2026-08-12T20:10:58.689154+00:00"
+}

@@ -1,0 +1,6 @@
+* -text
+
+*.pt filter=lfs diff=lfs merge=lfs -text
+*.tar.gz filter=lfs diff=lfs merge=lfs -text
+data/cifar-10-batches-py/data_batch_* filter=lfs diff=lfs merge=lfs -text
+data/cifar-10-batches-py/test_batch filter=lfs diff=lfs merge=lfs -text

@@ -1,6 +1,7 @@
-data/
 __pycache__/
 .pytest_cache/
 *.py[cod]
 
 .venv/
+tmp/
+WRN_CIFAR10_Reproduction_Final/
